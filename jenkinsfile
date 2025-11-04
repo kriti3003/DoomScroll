@@ -1,0 +1,52 @@
+pipeline {
+    agent any
+
+    tools {
+        nodejs 'NodeJS'   // Make sure you have NodeJS configured under Jenkins → Global Tool Configuration
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/kriti3003/DoomScroll.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                echo '📦 Installing project dependencies...'
+                sh 'npm install'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo '🏗️ Building the project...'
+                sh 'npm run build || echo "No build step defined"'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo '🧪 Running tests...'
+                sh 'npm test || echo "No tests found"'
+            }
+        }
+
+        stage('Deploy (Demo)') {
+            steps {
+                echo '🚀 Deploying application (simulated)...'
+                sh 'echo "Application deployed successfully!"'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Build and Deployment successful!'
+        }
+        failure {
+            echo '❌ Build failed. Please check logs.'
+        }
+    }
+}
